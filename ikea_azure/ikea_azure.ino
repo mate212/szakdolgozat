@@ -376,7 +376,6 @@ void setup()
 
 void loop()
 {
-  //Serial.println("loop 1");
 
   if (mySerial.available()) {
 
@@ -394,23 +393,10 @@ void loop()
         C = buffer[6];
         Serial.print("PM2.5 concentration: ");
         Serial.println(C);
-        
-        /*ppm = C;
-        ppm -= 40;
-        if (ppm < 0) ppm = 0;
-        C = ppm;*/
-
-        //C = C - 30;
 
         for (int i = 0; i < 6; i++) {
           if (C >= pm25_Clow[i] && C <= pm25_Chigh[i]) {
-            // Calculate AQI based on PM2.5 concentration range
             I = (aqi_Ihigh[i] - aqi_Ilow[i]) / (pm25_Chigh[i] - pm25_Clow[i]) * (C - pm25_Clow[i]) + aqi_Ilow[i];
-
-            /*ppm = I;
-            ppm -= 25;
-            if (ppm < 0) ppm = 0;
-            I = I - 36;*/
             
             Serial.print("PM2.5 AQI: ");
             Serial.println(I);
@@ -427,8 +413,6 @@ void loop()
         for (int i = 1; i < 20; i++) {
           buffer[i-1] = buffer[i];
         }
-    
-        //memset(buffer, 0, sizeof(buffer));
       }
     }
 
@@ -437,10 +421,6 @@ void loop()
 
 
 
-  
-
-  //Serial.println("loop 2");
-  // MQTT loop must be called to process Device-to-Cloud and Cloud-to-Device.
   mqtt_client.loop();
-  //delay(500);
+
 }
